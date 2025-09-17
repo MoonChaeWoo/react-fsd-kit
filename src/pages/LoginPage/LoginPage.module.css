@@ -1,0 +1,5 @@
+.loginPage {
+    background-image: url('./assets/loginPage_bg.png');
+    background-size: cover;
+    min-height: 100vh;
+}
