@@ -1,8 +1,8 @@
 const Header = ({ title }) => {
     return (
-        <>
+        <header>
             header
-        </>
+        </header>
     )
 };
 

@@ -1,8 +1,8 @@
 const Footer = ({ title }) => {
     return (
-        <>
+        <footer>
             Footer
-        </>
+        </footer>
     )
 };
 
