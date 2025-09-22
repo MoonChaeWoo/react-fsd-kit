@@ -1,14 +1,49 @@
-import React, { useEffect } from 'react';
-import 'ol/ol.css'; // OpenLayers 기본 스타일
+import React, { useEffect, useState, useReducer } from 'react';
+import 'ol/ol.css';
 import Map from 'ol/Map';
 import View from 'ol/View';
-import { defaults as defaultInteractions, KeyboardPan, KeyboardZoom } from 'ol/interaction';
+import { defaults as defaultInteractions } from 'ol/interaction';
 import createVworldTileGrop from "../../shared/utils/openlayers/MapTile/VworldMap";
+import createItsTileLayer from "../../shared/utils/openlayers/MapTile/ItsTileMap";
 import { get as getProjection, transform } from 'ol/proj';
+import MapUtile from '../../shared/utils/openlayers/MapUtile';
+
+// Features
+import MapLayerControl from '../../features/Openlayers/MapLayerControl/ui/MapLayerControl';
+import MapMeasure from '../../features/Openlayers/MapMeasure/ui/MapMeasure';
+import SelectFeature from '../../features/SelectFeature/ui/SelectFeature';
+import ClearFeatures from '../../features/Openlayers/ClearFeatures/ui/ClearFeatures';
+import DrawTool from '../../features/Openlayers/DrawTool/ui/DrawTool';
+import MoveCurrentLocation from "../../features/Openlayers/MoveCurrentLocation/ui/MoveCurrentLocation.jsx";
+import { Toast } from "../../shared/ui/Toast";
+
+const initialState = {
+    target: null,
+    distanceState: false,
+    areaState: false
+};
+
+const measureReducer = (state, action) => {
+    switch (action.target) {
+        case 'LineString':
+            return { ...state, distanceState: !state.distanceState, areaState: false };
+        case 'Polygon':
+            return { ...state, areaState: !state.areaState, distanceState: false };
+        case 'all':
+            return { ...state, areaState: false, distanceState: false };
+        default:
+            return state;
+    }
+};
 
 const MapMain = () => {
+    const [mapUtile, setMapUtile] = useState(null);
+    const [activeMeasure, dispatchActiveMeasure] = useReducer(measureReducer, initialState);
+    const [selectFeatureState, setSelectFeatureState] = useState(false);
+    const [isToastVisible, setIsToastVisible] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
+
     useEffect(() => {
-        // 광주 시청 기준
         const center = transform([126.8513271, 35.1600702], 'EPSG:4326', 'EPSG:5186');
 
         const map = new Map({
@@ -21,20 +56,54 @@ const MapMain = () => {
             }),
             interactions: defaultInteractions({ keyboard: true })
         });
-
         map.addLayer(createVworldTileGrop());
+        map.addLayer(createItsTileLayer());
 
-        // cleanup: 컴포넌트 언마운트 시 지도 제거
-        return () => map.setTarget(null);
+        setMapUtile(new MapUtile(map));
+        return () => {
+            map.setTarget(null);
+        };
     }, []);
 
+    useEffect(() => {
+        let showTimer;
+        let hideTimer;
+        if(isToastVisible){
+            showTimer = setTimeout(() => {
+                setIsToastVisible(true);
+            }, 500);
+
+            hideTimer = setTimeout(() => {
+                setIsToastVisible(false);
+            }, 5000);
+        }
+
+        return () => {
+            clearTimeout(showTimer);
+            clearTimeout(hideTimer);
+        };
+    }, [isToastVisible])
+
+    window.mapUtile = mapUtile;
     return (
         <main className="flex-1 bg-gray-100 relative">
             <div id='map' className='absolute inset-0 bg-gray-300'></div>
 
-            <div className="absolute top-6 left-6 right-6 p-6 bg-white rounded-lg shadow-md">
-                <p className="text-gray-600">This is a dark sidebar example with submenus.</p>
+            <div className="absolute top-6 left-1/2 p-6 w-1/2 -translate-x-1/2 flex justify-between items-center rounded-[2rem] border border-white/20 bg-transparent backdrop-blur-3xl backdrop-saturate-200 shadow-lg shadow-black/10 relative overflow-hidden">
+                <div className="absolute inset-0 rounded-[2rem] pointer-events-none bg-gradient-to-br from-white/30 via-transparent to-transparent opacity-20"/>
+                <MapMeasure mapUtile={mapUtile} activeMeasure={activeMeasure}
+                            dispatchActiveMeasure={dispatchActiveMeasure}/>
+                {/*<DrawTool mapUtile={mapUtile}/>*/}
+                <SelectFeature mapUtile={mapUtile} selectFeatureState={selectFeatureState}
+                               setSelectFeatureState={setSelectFeatureState}
+                               dispatchActiveMeasure={dispatchActiveMeasure}/>
+                <ClearFeatures mapUtile={mapUtile}/>
+                <MoveCurrentLocation mapUtile={mapUtile} setToast={setIsToastVisible}
+                                     setToastMessage={setToastMessage}/>
+                <MapLayerControl mapUtile={mapUtile}/>
             </div>
+
+            <Toast isToastVisible={isToastVisible} toastMessage={toastMessage}/>
         </main>
     );
 };

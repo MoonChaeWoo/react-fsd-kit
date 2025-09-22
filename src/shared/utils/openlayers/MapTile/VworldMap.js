@@ -26,7 +26,9 @@ const createVworldTileGrop = () => {
     // vworld(2D)
     const vworld2DTileLayer = new TileLayer({
         id: 'vworld2D',
-        source: new VworldMap(),
+        source: new VworldMap({
+            type: 'BASE'
+        }),
         preload: 4,
         useInterimTilesOnError: false,
         visible: true
