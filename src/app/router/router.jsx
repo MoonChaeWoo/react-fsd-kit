@@ -2,7 +2,7 @@ import {createBrowserRouter} from "react-router-dom";
 import {PublicLayout, PrivateLayout} from "../layouts";
 import HomePage from "../../pages/HomePage/HomePage";
 import LoginPage from "../../pages/LoginPage/LoginPage";
-import DashboardPage from "../../pages/DashboardPage/DashboardPage";
+import DashboardPage from "../../pages/DashBoardPage/DashBoardPage";
 import SignupPage from "../../pages/SignupPage/SignupPage";
 import MapPage from "../../pages/MapPage/MapPage";
 import TestPage from "../../pages/TestPage/TestPage";
