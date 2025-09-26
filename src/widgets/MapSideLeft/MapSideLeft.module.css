@@ -1,0 +1,90 @@
+.resultList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Further reduced gap */
+    height: 100%; /* Fill parent container */
+    /* Custom scrollbar for webkit browsers */
+}
+
+.resultList::-webkit-scrollbar {
+    width: 8px;
+}
+
+.resultList::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.resultList::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.resultList::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.resultItem {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem; /* 8px */
+    padding: 0.5rem; /* Further reduced padding */
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0; /* Prevent items from shrinking */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+}
+
+.resultItem:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.itemContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem; /* Further reduced gap */
+    overflow: hidden; /* Hide overflowing text */
+    white-space: nowrap;
+}
+
+.itemContent span {
+    font-size: 0.8rem; /* Slightly smaller font */
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.itemContent a {
+    color: #d946ef; /* fuchsia-500 */
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.itemContent a:hover {
+    text-decoration: underline;
+}
+
+.moveButton {
+    background-image: linear-gradient(to right, rgba(251, 194, 235, 0.8) 0%, rgba(166, 193, 238, 0.8) 100%);
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    color: #1f2937; /* gray-800 */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+.moveButton:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    background-image: linear-gradient(to right, rgba(251, 194, 235, 1) 0%, rgba(166, 193, 238, 1) 100%);
+}
