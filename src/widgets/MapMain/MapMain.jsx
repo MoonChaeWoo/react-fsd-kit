@@ -7,15 +7,13 @@ import createVworldTileGrop from "../../shared/utils/openlayers/MapTile/VworldMa
 import createItsTileLayer from "../../shared/utils/openlayers/MapTile/ItsTileMap";
 import { get as getProjection, transform } from 'ol/proj';
 import MapUtile from '../../shared/utils/openlayers/MapUtile';
-
-// Features
 import MapLayerControl from '../../features/Openlayers/MapLayerControl/ui/MapLayerControl';
 import MapMeasure from '../../features/Openlayers/MapMeasure/ui/MapMeasure';
 import SelectFeature from '../../features/SelectFeature/ui/SelectFeature';
 import ClearFeatures from '../../features/Openlayers/ClearFeatures/ui/ClearFeatures';
-import DrawTool from '../../features/Openlayers/DrawTool/ui/DrawTool';
 import MoveCurrentLocation from "../../features/Openlayers/MoveCurrentLocation/ui/MoveCurrentLocation.jsx";
 import { Toast } from "../../shared/ui/Toast";
+import {useMapUtileStore} from "../../app/providers/store.js";
 
 const initialState = {
     target: null,
@@ -42,6 +40,7 @@ const MapMain = () => {
     const [selectFeatureState, setSelectFeatureState] = useState(false);
     const [isToastVisible, setIsToastVisible] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
+    const setMapUtileStore = useMapUtileStore((state) => state.setMapUtile);
 
     useEffect(() => {
         const center = transform([126.8513271, 35.1600702], 'EPSG:4326', 'EPSG:5186');
@@ -59,7 +58,10 @@ const MapMain = () => {
         map.addLayer(createVworldTileGrop());
         map.addLayer(createItsTileLayer());
 
-        setMapUtile(new MapUtile(map));
+        const mapUtileInstance = new MapUtile(map);
+        setMapUtile(mapUtileInstance);
+        setMapUtileStore(mapUtileInstance);
+
         return () => {
             map.setTarget(null);
         };
@@ -85,6 +87,7 @@ const MapMain = () => {
     }, [isToastVisible])
 
     window.mapUtile = mapUtile;
+    window.MapUtile = MapUtile;
     return (
         <main className="flex-1 bg-gray-100 relative">
             <div id='map' className='absolute inset-0 bg-gray-300'></div>

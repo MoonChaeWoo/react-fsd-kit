@@ -15,4 +15,9 @@ const useClientInfoStore = create(
     )
 );
 
+export const useMapUtileStore = create((set) => ({
+    mapUtile: {},
+    setMapUtile: (instance) => set({ mapUtile: instance }),
+}));
+
 export default useClientInfoStore;

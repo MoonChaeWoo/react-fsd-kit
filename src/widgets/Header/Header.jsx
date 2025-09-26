@@ -10,19 +10,20 @@ const Header = () => {
                 <div className="flex h-16 items-center justify-between">
                     <div className="flex-1 md:flex md:items-center md:gap-12">
                         <Logo />
+                        <h1>MoonChaeWoo</h1>
                     </div>
 
-                    <div className="md:flex md:items-center md:gap-12">
-                        <Nav />
+                    {/*<div className="md:flex md:items-center md:gap-12">*/}
+                    {/*    <Nav />*/}
 
-                        <div className="hidden md:relative md:block">
-                            <UserMenu />
-                        </div>
+                    {/*    <div className="hidden md:relative md:block">*/}
+                    {/*        /!*<UserMenu />*!/*/}
+                    {/*    </div>*/}
 
-                        <div className="block md:hidden">
-                            <MobileMenuButton />
-                        </div>
-                    </div>
+                    {/*    <div className="block md:hidden">*/}
+                    {/*        <MobileMenuButton />*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                 </div>
             </div>
         </header>
