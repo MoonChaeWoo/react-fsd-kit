@@ -1,5 +1,12 @@
 .loginPage {
-    background-image: url('./assets/loginPage_bg.png');
-    background-size: cover;
-    min-height: 100vh;
+    background: linear-gradient(45deg, #FC466B, #3F5EFB);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginPage_color {
+    background-color: #101828;
+    height: 100vh;
 }
